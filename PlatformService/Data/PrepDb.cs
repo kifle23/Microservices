@@ -7,7 +7,7 @@ namespace PlatformService.Data
     {
         public static void PrepPopulation(IApplicationBuilder app, bool isProd)
         {
-            using( var serviceScope = app.ApplicationServices.CreateScope())
+            using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetService<AppDbContext>();
                 if (dbContext != null)
@@ -19,20 +19,20 @@ namespace PlatformService.Data
 
         private static void SeedData(AppDbContext context, bool isProd)
         {
-            if(isProd)
+            if (isProd)
             {
                 Console.WriteLine("--> Attempting to apply migrations...");
                 try
                 {
                     context.Database.Migrate();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine($"--> Could not run migrations: {ex.Message}");
                 }
             }
-            
-            if(!context.Platforms.Any())
+
+            if (!context.Platforms.Any())
             {
                 Console.WriteLine("--> Seeding Data...");
 
@@ -46,6 +46,6 @@ namespace PlatformService.Data
             {
                 Console.WriteLine("--> We already have data");
             }
-        }        
+        }
     }
 }
