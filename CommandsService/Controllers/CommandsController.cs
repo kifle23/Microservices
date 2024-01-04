@@ -8,10 +8,10 @@ namespace CommandsService.Controllers
 {
     [ApiController]
     [Route("api/c/platforms/{platformId}/[controller]")]
-    public class CommandsController(ICommandRepo repository, IMapper mapper): ControllerBase
+    public class CommandsController(ICommandRepo repository, IMapper mapper) : ControllerBase
     {
-        private readonly ICommandRepo _repository= repository;
-        private readonly IMapper _mapper= mapper;
+        private readonly ICommandRepo _repository = repository;
+        private readonly IMapper _mapper = mapper;
 
         [HttpGet]
         public ActionResult<IEnumerable<CommandReadDto>> GetCommandsForPlatform(int platformId)
