@@ -1,6 +1,6 @@
 using PlatformService.Dtos;
 
-namespace AsyncDataServices
+namespace PlatformService.AsyncDataServices
 {
     public interface IMessageBusClient
     {
