@@ -1,4 +1,5 @@
 using System.Text;
+using Microsoft.Extensions.Logging;
 using CommandsService.EventProcessing;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -9,23 +10,29 @@ namespace CommandsService.AsyncDataServices
     {
         private readonly IConfiguration _configuration;
         private readonly IEventProcessor _eventProcessor;
+        private readonly ILogger<MessageBusSubscriber> _logger;
         private IConnection _connection;
         private IModel _channel;
         private string _queueName;
 
         public MessageBusSubscriber(
             IConfiguration configuration,
-            IEventProcessor eventProcessor)
+            IEventProcessor eventProcessor,
+            ILogger<MessageBusSubscriber> logger)
         {
             _configuration = configuration;
             _eventProcessor = eventProcessor;
+            _logger = logger;
 
             InitializeRabbitMQ();
         }
 
         private void InitializeRabbitMQ()
         {
-            var factory = new ConnectionFactory() { HostName = _configuration["RabbitMQHost"], Port = int.Parse(_configuration["RabbitMQPort"]) };
+            var hostName = Environment.GetEnvironmentVariable("RabbitMQHost");
+            var port = int.Parse(Environment.GetEnvironmentVariable("RabbitMQPort"));
+
+            var factory = new ConnectionFactory() { HostName = hostName, Port = port };
 
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
@@ -35,7 +42,7 @@ namespace CommandsService.AsyncDataServices
                 exchange: "trigger",
                 routingKey: "");
 
-            Console.WriteLine("--> Listenting on the Message Bus...");
+            _logger.LogInformation("--> Listening on the Message Bus...");
 
             _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
         }
@@ -48,7 +55,7 @@ namespace CommandsService.AsyncDataServices
 
             consumer.Received += (ModuleHandle, ea) =>
             {
-                Console.WriteLine("--> Event Received!");
+                _logger.LogInformation("--> Event Received!");
 
                 var body = ea.Body;
                 var notificationMessage = Encoding.UTF8.GetString(body.ToArray());
@@ -63,7 +70,7 @@ namespace CommandsService.AsyncDataServices
 
         private void RabbitMQ_ConnectionShutdown(object sender, ShutdownEventArgs e)
         {
-            Console.WriteLine("--> Connection Shutdown");
+            _logger.LogInformation("--> Connection Shutdown");
         }
 
         public override void Dispose()
