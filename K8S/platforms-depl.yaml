@@ -15,6 +15,11 @@ spec:
       containers:
         - name: platformservice
           image: kifle23/platformservice:latest
+          env:
+            - name: RabbitMQHost
+              value: "rabbitmq-clusterip-srv"
+            - name: RabbitMQPort
+              value: "5672"
 ---
 apiVersion: v1
 kind: Service
