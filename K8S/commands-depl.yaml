@@ -20,6 +20,8 @@ spec:
               value: "rabbitmq-clusterip-srv"
             - name: RabbitMQPort
               value: "5672"
+            - name: GrpcPlatform
+              value: "http://platforms-clusterip-srv:777"
 ---
 apiVersion: v1
 kind: Service
