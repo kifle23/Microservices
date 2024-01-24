@@ -8,7 +8,6 @@ This repository contains the source code and materials for a microservices proje
 - [Introduction](#introduction)
 - [Project Overview](#project-overview)
 - [Project Structure](#project-structure)
-- [Microservices Implementation](#microservices-implementation)
 - [Docker & Kubernetes Deployment](#docker--kubernetes-deployment)
 - [Additional Services](#additional-services)
 - [SQL Server Integration](#sql-server-integration)
